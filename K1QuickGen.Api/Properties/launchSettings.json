@@ -1,0 +1,14 @@
+{
+  "profiles": {
+    "K1QuickGen.Api": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:64916;http://localhost:64917"
+    }
+  }
+}
