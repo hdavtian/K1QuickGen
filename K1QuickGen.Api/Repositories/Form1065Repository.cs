@@ -20,5 +20,11 @@ namespace K1QuickGen.Api.Repositories
 
         public Task<List<Form1065>> GetByCompanyIdAsync(Guid companyId) =>
             _collection.Find(x => x.CompanyId == companyId).ToListAsync();
+
+        public Task<Form1065?> GetByIdAsync(Guid form1065Id)
+        {
+            return _collection.Find(x => x.Id == form1065Id).FirstOrDefaultAsync()!;
+        }
+
     }
 }

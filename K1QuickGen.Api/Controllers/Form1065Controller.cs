@@ -4,6 +4,7 @@ using K1QuickGen.Contracts.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace K1QuickGen.Api.Controllers
@@ -12,11 +13,13 @@ namespace K1QuickGen.Api.Controllers
     [Route("api/[controller]")]
     public class Form1065Controller : ControllerBase
     {
-        private readonly Form1065Repository _repo;
+        private readonly Form1065Repository _form1065Repo;
+        private readonly PartnerSubmissionRepository _partnerRepo;
 
-        public Form1065Controller(Form1065Repository repo)
+        public Form1065Controller(Form1065Repository form1065Repo, PartnerSubmissionRepository partnerRepo)
         {
-            _repo = repo;
+            _form1065Repo = form1065Repo;
+            _partnerRepo = partnerRepo;
         }
 
         [HttpPost]
@@ -33,15 +36,42 @@ namespace K1QuickGen.Api.Controllers
                 // Id and CreatedOn are auto-generated
             };
 
-            await _repo.InsertAsync(form);
+            await _form1065Repo.InsertAsync(form);
             return Ok(form);
         }
 
         [HttpGet("{companyId}")]
         public async Task<ActionResult<List<Form1065>>> GetByCompany(Guid companyId)
         {
-            var results = await _repo.GetByCompanyIdAsync(companyId);
+            var results = await _form1065Repo.GetByCompanyIdAsync(companyId);
             return Ok(results);
         }
+
+        [HttpGet("generate/{form1065Id}")]
+        public async Task<IActionResult> GenerateFormAndK1s(Guid form1065Id)
+        {
+            var form = await _form1065Repo.GetByIdAsync(form1065Id);
+            if (form == null) return NotFound("Form1065 not found");
+
+            var partners = await _partnerRepo.GetByForm1065IdAsync(form1065Id);
+
+            var result = new Form1065OutputDto
+            {
+                Form1065Id = form.Id,
+                CompanyName = form.CompanyName,
+                TaxYear = form.TaxYear,
+                PartnerK1s = partners.Select(p => new K1ScheduleDto
+                {
+                    PartnerName = p.PartnerName,
+                    PartnerType = p.PartnerType,
+                    OwnershipPercentage = p.OwnershipPercentage,
+                    CapitalContribution = p.CapitalContribution,
+                    Email = p.Email
+                }).ToList()
+            };
+
+            return Ok(result);
+        }
+
     }
 }
