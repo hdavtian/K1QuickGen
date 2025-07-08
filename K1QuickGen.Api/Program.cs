@@ -1,5 +1,7 @@
 ﻿using K1QuickGen.Api.Config;
 using K1QuickGen.Api.Repositories;
+using K1QuickGen.PdfGeneration;
+using K1QuickGen.PdfGeneration.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -55,6 +57,9 @@ namespace K1QuickGen.Api
                 builder.Services.AddScoped<Form1065Repository>();
                 builder.Services.AddScoped<PartnerSubmissionRepository>();
                 builder.Services.AddScoped<ReturnRepository>();
+                builder.Services.AddScoped<IForm1065PdfGenerator, Form1065PdfGenerator>();
+
+                QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 
                 var app = builder.Build();
 
