@@ -24,5 +24,19 @@ namespace K1QuickGen.Api.Models
         public string? Email { get; set; }
 
         public DateTime SubmittedOn { get; set; } = DateTime.UtcNow;
+        public string? SSNOrEIN { get; set; }
+        public string? Address { get; set; }
+        public string? City { get; set; }
+        public string? State { get; set; }
+        public string? ZipCode { get; set; }
+        public string? Country { get; set; }
+
+        public bool IsForeignPartner { get; set; }
+        public bool IsTaxExemptEntity { get; set; }
+
+        public decimal BeginningCapitalAccount { get; set; }
+        public decimal EndingCapitalAccount { get; set; }
+        public decimal ShareOfIncome { get; set; } // For example purposes — normally this is a computed field
+        public decimal ShareOfDeductions { get; set; }
     }
 }
