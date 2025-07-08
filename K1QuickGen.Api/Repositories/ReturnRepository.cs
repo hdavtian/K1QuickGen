@@ -15,11 +15,14 @@ namespace K1QuickGen.Api.Repositories
             _collection = db.GetCollection<PartnershipReturn>("PartnershipReturns");
         }
 
-        public Task<List<PartnershipReturn>> GetByCompanyIdAsync(string companyId) =>
+        public Task<List<PartnershipReturn>> GetByCompanyIdAsync(Guid companyId) =>
             _collection.Find(x => x.CompanyId == companyId).ToListAsync();
 
-        public Task<PartnershipReturn?> GetByIdAsync(Guid id) =>
-            _collection.Find(x => x.Id == id).FirstOrDefaultAsync();
+        public async Task<PartnershipReturn?> GetByIdAsync(Guid id)
+        {
+            return await _collection.Find(x => x.Id == id).FirstOrDefaultAsync().ConfigureAwait(false);
+        }
+
 
         public Task InsertAsync(PartnershipReturn returnDoc) =>
             _collection.InsertOneAsync(returnDoc);

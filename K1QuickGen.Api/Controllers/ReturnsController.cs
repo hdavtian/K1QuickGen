@@ -6,55 +6,56 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
-namespace K1QuickGen.Api.Controllers;
-
-[ApiController]
-[Route("api/[controller]")]
-public class ReturnsController : ControllerBase
+namespace K1QuickGen.Api.Controllers
 {
-    private readonly ILogger<ReturnsController> _logger;
-    private readonly ReturnRepository _repo;
-
-    public ReturnsController(ReturnRepository repo, ILogger<ReturnsController> logger)
+    [ApiController]
+    [Route("api/[controller]")]
+    public class ReturnsController : ControllerBase
     {
-        _repo = repo;
-        _logger = logger;
-    }
+        private readonly ILogger<ReturnsController> _logger;
+        private readonly ReturnRepository _repo;
 
-    [HttpPost]
-    public async Task<IActionResult> Create([FromBody] PartnershipReturnDto dto)
-    {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
-        var model = new PartnershipReturn
+        public ReturnsController(ReturnRepository repo, ILogger<ReturnsController> logger)
         {
-            CompanyId = dto.CompanyId,
-            PartnershipName = dto.PartnershipName,
-            EIN = dto.EIN,
-            TaxYear = dto.TaxYear
-        };
+            _repo = repo;
+            _logger = logger;
+        }
 
-        await _repo.InsertAsync(model);
-        _logger.LogInformation("Created partnership return for {Name} ({EIN})", model.PartnershipName, model.EIN);
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] PartnershipReturnDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-        return CreatedAtAction(nameof(GetById), new { id = model.Id }, model);
-    }
+            var model = new PartnershipReturn
+            {
+                CompanyId = dto.CompanyId,
+                PartnershipName = dto.PartnershipName,
+                EIN = dto.EIN,
+                TaxYear = dto.TaxYear
+            };
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(Guid id)
-    {
-        var result = await _repo.GetByIdAsync(id);
-        if (result == null)
-            return NotFound();
+            await _repo.InsertAsync(model);
+            _logger.LogInformation("Created partnership return for {Name} ({EIN})", model.PartnershipName, model.EIN);
 
-        return Ok(result);
-    }
+            return CreatedAtAction(nameof(GetById), new { id = model.Id }, model);
+        }
 
-    [HttpGet("by-company/{companyId}")]
-    public async Task<IActionResult> GetByCompany(string companyId)
-    {
-        var results = await _repo.GetByCompanyIdAsync(companyId);
-        return Ok(results);
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var result = await _repo.GetByIdAsync(id);
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpGet("by-company/{companyId}")]
+        public async Task<IActionResult> GetByCompany(Guid companyId)
+        {
+            var results = await _repo.GetByCompanyIdAsync(companyId);
+            return Ok(results);
+        }
     }
 }

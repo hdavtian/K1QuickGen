@@ -1,5 +1,6 @@
 ﻿using K1QuickGen.Api.Models;
 using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -42,7 +43,7 @@ namespace K1QuickGen.Api.Repositories
             return _collection.Find(_ => true).ToListAsync();
         }
 
-        public Task<List<PartnerSubmission>> GetByForm1065IdAsync(string form1065Id) =>
+        public Task<List<PartnerSubmission>> GetByForm1065IdAsync(Guid form1065Id) =>
             _collection.Find(x => x.Form1065Id == form1065Id).ToListAsync();
     }
 }

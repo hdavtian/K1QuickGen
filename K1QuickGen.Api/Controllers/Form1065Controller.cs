@@ -2,6 +2,7 @@
 using K1QuickGen.Api.Repositories;
 using K1QuickGen.Contracts.Dtos;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -21,7 +22,7 @@ namespace K1QuickGen.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> SubmitForm([FromBody] Form1065CreateDto dto)
         {
-            if (dto == null || string.IsNullOrWhiteSpace(dto.CompanyId))
+            if (dto == null || dto.CompanyId == Guid.Empty)
                 return BadRequest("Missing required fields.");
 
             var form = new Form1065
@@ -29,7 +30,7 @@ namespace K1QuickGen.Api.Controllers
                 CompanyId = dto.CompanyId,
                 CompanyName = dto.CompanyName,
                 TaxYear = dto.TaxYear
-                // Id and CreatedOn will be auto-generated
+                // Id and CreatedOn are auto-generated
             };
 
             await _repo.InsertAsync(form);
@@ -37,7 +38,7 @@ namespace K1QuickGen.Api.Controllers
         }
 
         [HttpGet("{companyId}")]
-        public async Task<ActionResult<List<Form1065>>> GetByCompany(string companyId)
+        public async Task<ActionResult<List<Form1065>>> GetByCompany(Guid companyId)
         {
             var results = await _repo.GetByCompanyIdAsync(companyId);
             return Ok(results);

@@ -10,7 +10,10 @@ public class PartnershipReturn
     [BsonRepresentation(BsonType.String)] // Prevents Guid serialization issues
     public Guid Id { get; set; } = Guid.NewGuid();
     public string PartnershipName { get; set; }
-    public string CompanyId { get; set; }
+
+    [BsonRepresentation(BsonType.String)]
+    public Guid CompanyId { get; set; }
+    
     public string EIN { get; set; }
     public int TaxYear { get; set; }
 }

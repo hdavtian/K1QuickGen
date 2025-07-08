@@ -25,7 +25,7 @@ namespace K1QuickGen.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> SubmitPartner([FromBody] PartnerSubmissionCreateDto dto)
         {
-            if (dto == null || string.IsNullOrWhiteSpace(dto.CompanyId))
+            if (dto == null || dto.CompanyId == Guid.Empty || dto.Form1065Id == Guid.Empty)
                 return BadRequest("Invalid partner submission.");
 
             var submission = new PartnerSubmission
@@ -34,6 +34,9 @@ namespace K1QuickGen.Api.Controllers
                 CompanyId = dto.CompanyId,
                 PartnerName = dto.PartnerName,
                 PartnerType = dto.PartnerType,
+                OwnershipPercentage = dto.OwnershipPercentage,
+                CapitalContribution = dto.CapitalContribution,
+                Email = dto.Email,
                 SubmittedOn = DateTime.UtcNow
             };
 
@@ -51,8 +54,11 @@ namespace K1QuickGen.Api.Controllers
             return Ok(submissions);
         }
 
+        /// <summary>
+        /// Get partners by Form1065 ID (Guid).
+        /// </summary>
         [HttpGet("by-form/{form1065Id}")]
-        public async Task<ActionResult<List<PartnerSubmission>>> GetByForm(string form1065Id)
+        public async Task<ActionResult<List<PartnerSubmission>>> GetByForm(Guid form1065Id)
         {
             var partners = await _repository.GetByForm1065IdAsync(form1065Id);
             return Ok(partners);
