@@ -8,6 +8,10 @@ namespace K1QuickGen.DataSeeder
     {
         public static async Task Main(string[] args)
         {
+            
+        }
+
+        static async Task SeedMongo() {
             var client = new HttpClient();
             client.BaseAddress = new Uri("https://localhost:64916"); // Update your port if needed
 
