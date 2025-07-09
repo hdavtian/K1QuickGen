@@ -22,7 +22,7 @@ namespace K1QuickGen.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] PartnershipReturnDto dto)
+        public async Task<IActionResult> Create([FromBody] PartnershipReturnCreateDto dto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

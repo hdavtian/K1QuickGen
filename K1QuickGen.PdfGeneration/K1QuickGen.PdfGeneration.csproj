@@ -6,7 +6,19 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
+	<ItemGroup>
+	  <None Remove="PdfTemplates\2024\f1065.pdf" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="PdfTemplates\2024\f1065.pdf">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
+
   <ItemGroup>
+    <PackageReference Include="itext7" Version="9.2.0" />
+    <PackageReference Include="itext7.bouncy-castle-adapter" Version="9.2.0" />
     <PackageReference Include="QuestPDF" Version="2025.7.0" />
   </ItemGroup>
 

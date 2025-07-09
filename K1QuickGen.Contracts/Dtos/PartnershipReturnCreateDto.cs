@@ -3,7 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace K1QuickGen.Contracts.Dtos
 {
-    public class PartnershipReturnDto
+    /// <summary>
+    /// DTO used in API POST request for creating a new Partnership Return.
+    /// </summary>
+    public class PartnershipReturnCreateDto
     {
         [Required]
         public Guid CompanyId { get; set; }     // Required for linking and sharding

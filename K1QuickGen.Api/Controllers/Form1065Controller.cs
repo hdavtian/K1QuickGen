@@ -38,12 +38,42 @@ namespace K1QuickGen.Api.Controllers
             {
                 CompanyId = dto.CompanyId,
                 CompanyName = dto.CompanyName,
-                TaxYear = dto.TaxYear
-                // Id and CreatedOn are auto-generated
+                TaxYear = dto.TaxYear,
+                BusinessActivity = dto.BusinessActivity,
+                ProductOrService = dto.ProductOrService,
+                BusinessCode = dto.BusinessCode,
+                Address = dto.Address,
+                City = dto.City,
+                State = dto.State,
+                ZipCode = dto.ZipCode,
+                Country = dto.Country,
+                DateBusinessStarted = dto.DateBusinessStarted,
+                IsFinalReturn = dto.IsFinalReturn,
+                IsAmendedReturn = dto.IsAmendedReturn
             };
 
             await _form1065Repo.InsertAsync(form);
-            return Ok(form);
+
+            var returnDto = new Form1065OutputDto
+            {
+                Form1065Id = form.Id,
+                CompanyName = form.CompanyName,
+                TaxYear = form.TaxYear,
+                BusinessActivity = form.BusinessActivity,
+                ProductOrService = form.ProductOrService,
+                BusinessCode = form.BusinessCode,
+                Address = form.Address,
+                City = form.City,
+                State = form.State,
+                ZipCode = form.ZipCode,
+                Country = form.Country,
+                DateBusinessStarted = form.DateBusinessStarted,
+                IsFinalReturn = form.IsFinalReturn,
+                IsAmendedReturn = form.IsAmendedReturn,
+                PartnerK1s = new List<K1ScheduleDto>()
+            };
+
+            return Ok(returnDto);
         }
 
         [HttpGet("{companyId}")]
@@ -92,6 +122,17 @@ namespace K1QuickGen.Api.Controllers
                 Form1065Id = form.Id,
                 CompanyName = form.CompanyName,
                 TaxYear = form.TaxYear,
+                BusinessActivity = form.BusinessActivity,
+                ProductOrService = form.ProductOrService,
+                BusinessCode = form.BusinessCode,
+                Address = form.Address,
+                City = form.City,
+                State = form.State,
+                ZipCode = form.ZipCode,
+                Country = form.Country,
+                DateBusinessStarted = form.DateBusinessStarted,
+                IsFinalReturn = form.IsFinalReturn,
+                IsAmendedReturn = form.IsAmendedReturn,
                 PartnerK1s = partners.Select(p => new K1ScheduleDto
                 {
                     PartnerName = p.PartnerName,
@@ -105,6 +146,5 @@ namespace K1QuickGen.Api.Controllers
             var pdfBytes = _pdfGenerator.GeneratePdf(dto);
             return File(pdfBytes, "application/pdf", $"Form1065_{form.CompanyName}.pdf");
         }
-
     }
 }

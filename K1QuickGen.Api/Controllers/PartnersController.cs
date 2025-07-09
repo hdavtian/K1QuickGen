@@ -37,11 +37,36 @@ namespace K1QuickGen.Api.Controllers
                 OwnershipPercentage = dto.OwnershipPercentage,
                 CapitalContribution = dto.CapitalContribution,
                 Email = dto.Email,
-                SubmittedOn = DateTime.UtcNow
+                SubmittedOn = DateTime.UtcNow,
+                SSNOrEIN = dto.SSNOrEIN,
+                Address = dto.Address,
+                City = dto.City,
+                State = dto.State,
+                ZipCode = dto.ZipCode,
+                Country = dto.Country,
+                IsForeignPartner = dto.IsForeignPartner,
+                IsTaxExemptEntity = dto.IsTaxExemptEntity,
+                BeginningCapitalAccount = dto.BeginningCapitalAccount,
+                EndingCapitalAccount = dto.EndingCapitalAccount,
+                ShareOfIncome = dto.ShareOfIncome,
+                ShareOfDeductions = dto.ShareOfDeductions
             };
 
             await _repository.InsertAsync(submission);
-            return Ok(submission);
+
+            var outputDto = new PartnerSubmissionOutputDto
+            {
+                Id = submission.Id,
+                Form1065Id = submission.Form1065Id,
+                CompanyId = submission.CompanyId,
+                PartnerName = submission.PartnerName,
+                PartnerType = submission.PartnerType,
+                OwnershipPercentage = submission.OwnershipPercentage,
+                CapitalContribution = submission.CapitalContribution,
+                Email = submission.Email,
+            };
+
+            return Ok(outputDto);
         }
 
         /// <summary>

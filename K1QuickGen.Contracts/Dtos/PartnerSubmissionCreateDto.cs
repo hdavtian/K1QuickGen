@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace K1QuickGen.Contracts.Dtos
 {
+    /// <summary>
+    /// DTO used in API POST request for creating a new Partner Submission.
+    /// </summary>
     public class PartnerSubmissionCreateDto
     {
         [Required]

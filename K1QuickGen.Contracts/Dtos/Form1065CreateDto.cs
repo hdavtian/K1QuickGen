@@ -3,6 +3,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace K1QuickGen.Contracts.Dtos
 {
+    /// <summary>
+    /// DTO to API communication
+    /// Data Transfer Object for creating a new Form 1065 (U.S. Return of Partnership Income).
+    /// Used as the request body when submitting a new Form1065 via the API.
+    /// </summary>
     public class Form1065CreateDto
     {
         [Required]
