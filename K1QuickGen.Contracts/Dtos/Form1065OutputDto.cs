@@ -14,6 +14,8 @@ namespace K1QuickGen.Contracts.Dtos
         public Guid Form1065Id { get; set; }
         public string CompanyName { get; set; }
         public Guid CompanyId { get; set; }
+        public string? Ein { get; set; }
+        public decimal? TotalAssets { get; set; }
         public int TaxYear { get; set; }
 
         public string? BusinessActivity { get; set; }

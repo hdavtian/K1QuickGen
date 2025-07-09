@@ -24,6 +24,8 @@ namespace K1QuickGen.Api.Models
         public string? ZipCode { get; set; }
         public string? Country { get; set; }
         public DateTime? DateBusinessStarted { get; set; }
+        public string? Ein { get; set; }
+        public decimal? TotalAssets { get; set; }
         public bool IsFinalReturn { get; set; }
         public bool IsAmendedReturn { get; set; }
     }

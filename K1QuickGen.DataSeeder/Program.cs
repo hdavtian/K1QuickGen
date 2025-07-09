@@ -8,7 +8,7 @@ namespace K1QuickGen.DataSeeder
     {
         public static async Task Main(string[] args)
         {
-            
+            //await SeedMongo();
         }
 
         static async Task SeedMongo() {
@@ -24,6 +24,8 @@ namespace K1QuickGen.DataSeeder
             {
                 CompanyId = companyId,
                 CompanyName = "Acme Software LLC",
+                Ein = "12-3456789",
+                TotalAssets = 1500000m,
                 TaxYear = 2024,
                 BusinessActivity = "Software Development",
                 ProductOrService = "Web Applications",

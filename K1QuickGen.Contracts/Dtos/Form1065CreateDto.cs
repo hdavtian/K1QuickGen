@@ -16,6 +16,10 @@ namespace K1QuickGen.Contracts.Dtos
         [Required]
         [MaxLength(200)]
         public string CompanyName { get; set; }
+        
+        [Required]
+        public string? Ein { get; set; }
+        public decimal? TotalAssets { get; set; }
 
         [Range(2000, 2100)]
         public int TaxYear { get; set; }

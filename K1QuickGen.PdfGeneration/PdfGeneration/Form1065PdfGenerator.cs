@@ -118,9 +118,9 @@ namespace K1QuickGen.PdfGeneration
             var cityZipCountry = $"{data.City} {data.State} {data.ZipCode} {data.Country}";
             Set(fields, Form1065FieldNames.CityZipCountry, cityZipCountry);
 
-            //Set(fields, Form1065FieldNames.Ein, data.E);
-            //Set(fields, Form1065FieldNames.DateBusinessStarted, cityZipCountry);
-            //Set(fields, Form1065FieldNames.TotalAssets, cityZipCountry);
+            Set(fields, Form1065FieldNames.Ein, data.Ein);
+            Set(fields, Form1065FieldNames.DateBusinessStarted, start.ToString("MM/dd/yyyy"));
+            Set(fields, Form1065FieldNames.TotalAssets, data.TotalAssets.ToString());
 
 
 
