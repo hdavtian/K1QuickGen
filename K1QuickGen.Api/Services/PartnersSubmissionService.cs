@@ -1,4 +1,5 @@
-﻿using K1QuickGen.Api.Models;
+﻿using K1QuickGen.Api.Interfaces;
+using K1QuickGen.Api.Models;
 using K1QuickGen.Api.Repositories;
 using K1QuickGen.Contracts.Dtos;
 using System;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace K1QuickGen.Api.Services
 {
-    public class PartnersSubmissionService
+    public class PartnersSubmissionService : IPartnersSubmissionService
     {
         private readonly PartnerSubmissionRepository _repository;
 

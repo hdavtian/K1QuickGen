@@ -1,4 +1,5 @@
-﻿using K1QuickGen.Api.Models;
+﻿using K1QuickGen.Api.Interfaces;
+using K1QuickGen.Api.Models;
 using K1QuickGen.Api.Repositories;
 using K1QuickGen.Contracts.Dtos;
 using System;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace K1QuickGen.Api.Services
 {
-    public class Form1065Service
+    public class Form1065Service : IForm1065Service
     {
         private readonly Form1065Repository _form1065Repo;
         private readonly PartnerSubmissionRepository _partnerRepo;
