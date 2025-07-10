@@ -8,7 +8,7 @@ namespace K1QuickGen.DataSeeder
     {
         public static async Task Main(string[] args)
         {
-            //await SeedMongo();
+            await SeedMongo();
         }
 
         static async Task SeedMongo() {
@@ -23,14 +23,14 @@ namespace K1QuickGen.DataSeeder
             var formDto = new Form1065CreateDto
             {
                 CompanyId = companyId,
-                CompanyName = "Acme Software LLC",
+                CompanyName = "Acme2 Software LLC",
                 Ein = "12-3456789",
-                TotalAssets = 1500000m,
+                TotalAssets = 1400000m,
                 TaxYear = 2024,
                 BusinessActivity = "Software Development",
                 ProductOrService = "Web Applications",
                 BusinessCode = "541511",
-                Address = "123 Demo Street",
+                Address = "1234 Demo Street",
                 City = "Los Angeles",
                 State = "CA",
                 ZipCode = "90001",

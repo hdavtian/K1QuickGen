@@ -40,32 +40,6 @@ namespace K1QuickGen.Api.Controllers
             if (formDto == null)
                 return NotFound();
             return Ok(formDto);
-            //var form = await _form1065Repo.GetByIdAsync(form1065Id);
-            //if (form == null)
-            //    return NotFound();
-
-            //var dto = new Form1065OutputDto
-            //{
-            //    Form1065Id = form.Id,
-            //    CompanyName = form.CompanyName,
-            //    CompanyId = form.CompanyId,
-            //    Ein = form.Ein,
-            //    TotalAssets = form.TotalAssets,
-            //    TaxYear = form.TaxYear,
-            //    BusinessActivity = form.BusinessActivity,
-            //    ProductOrService = form.ProductOrService,
-            //    BusinessCode = form.BusinessCode,
-            //    Address = form.Address,
-            //    City = form.City,
-            //    State = form.State,
-            //    ZipCode = form.ZipCode,
-            //    Country = form.Country,
-            //    DateBusinessStarted = form.DateBusinessStarted,
-            //    IsFinalReturn = form.IsFinalReturn,
-            //    IsAmendedReturn = form.IsAmendedReturn,
-            //    PartnerK1s = new List<K1ScheduleDto>() // or fetch if needed
-            //};
-            //return Ok(dto);
         }
 
         [HttpPost]
@@ -74,98 +48,33 @@ namespace K1QuickGen.Api.Controllers
             if (dto == null || dto.CompanyId == Guid.Empty)
                 return BadRequest("Missing required fields.");
 
-            var form = new Form1065
-            {
-                CompanyName = dto.CompanyName,
-                CompanyId = dto.CompanyId,
-                Ein = dto.Ein,
-                TotalAssets = dto.TotalAssets,
-                TaxYear = dto.TaxYear,
-                BusinessActivity = dto.BusinessActivity,
-                ProductOrService = dto.ProductOrService,
-                BusinessCode = dto.BusinessCode,
-                Address = dto.Address,
-                City = dto.City,
-                State = dto.State,
-                ZipCode = dto.ZipCode,
-                Country = dto.Country,
-                DateBusinessStarted = dto.DateBusinessStarted,
-                IsFinalReturn = dto.IsFinalReturn,
-                IsAmendedReturn = dto.IsAmendedReturn
-            };
-
-            await _form1065Repo.InsertAsync(form);
-
-            var returnDto = new Form1065OutputDto
-            {
-                Form1065Id = form.Id,
-                CompanyName = form.CompanyName,
-                CompanyId = form.CompanyId,
-                Ein = form.Ein,
-                TotalAssets = form.TotalAssets,
-                TaxYear = form.TaxYear,
-                BusinessActivity = form.BusinessActivity,
-                ProductOrService = form.ProductOrService,
-                BusinessCode = form.BusinessCode,
-                Address = form.Address,
-                City = form.City,
-                State = form.State,
-                ZipCode = form.ZipCode,
-                Country = form.Country,
-                DateBusinessStarted = form.DateBusinessStarted,
-                IsFinalReturn = form.IsFinalReturn,
-                IsAmendedReturn = form.IsAmendedReturn,
-                PartnerK1s = new List<K1ScheduleDto>()
-            };
-
+            var returnDto = await _form1065Service.CreateFormAsync(dto);
             return Ok(returnDto);
         }
 
         [HttpGet("{companyId}")]
-        public async Task<ActionResult<List<Form1065>>> GetByCompany(Guid companyId)
+        public async Task<ActionResult<List<Form1065OutputDto>>> GetByCompany(Guid companyId)
         {
-            var results = await _form1065Repo.GetByCompanyIdAsync(companyId);
+            var results = await _form1065Service.GetFormsByCompanyIdAsync(companyId);
             return Ok(results);
         }
 
         [HttpGet("generate/{form1065Id}")]
         public async Task<IActionResult> GenerateFormAndK1s(Guid form1065Id)
         {
-            var form = await _form1065Repo.GetByIdAsync(form1065Id);
-            if (form == null) return NotFound("Form1065 not found");
-
-            var partners = await _partnerRepo.GetByForm1065IdAsync(form1065Id);
-
-            var result = new Form1065OutputDto
-            {
-                Form1065Id = form.Id,
-                CompanyName = form.CompanyName,
-                TaxYear = form.TaxYear,
-                PartnerK1s = partners.Select(p => new K1ScheduleDto
-                {
-                    PartnerName = p.PartnerName,
-                    PartnerType = p.PartnerType,
-                    OwnershipPercentage = p.OwnershipPercentage,
-                    CapitalContribution = p.CapitalContribution,
-                    Email = p.Email
-                }).ToList()
-            };
-
+            var result = await _form1065Service.GetFormWithK1sAsync(form1065Id);
+            if (result == null) return NotFound("Form1065 not found");
             return Ok(result);
         }
 
         [HttpGet("generate-pdf/{form1065Id}")]
         public async Task<IActionResult> GeneratePdf(Guid form1065Id)
         {
-            var form = await _form1065Repo.GetByIdAsync(form1065Id);
-            if (form == null) return NotFound();
-
-            var partners = await _partnerRepo.GetByForm1065IdAsync(form1065Id);
-
-            var dto = await _form1065Service.GetForm1065DtoByIdAsync(form1065Id);
+            var dto = await _form1065Service.GetFormWithK1sAsync(form1065Id);
+            if (dto == null) return NotFound();
 
             var pdfBytes = _pdfGenerator.GeneratePdf(dto);
-            return File(pdfBytes, "application/pdf", $"Form1065_{form.CompanyName}.pdf");
+            return File(pdfBytes, "application/pdf", $"Form1065_{dto.CompanyName}.pdf");
         }
     }
 }
