@@ -1,4 +1,5 @@
-﻿using K1QuickGen.Api.Models;
+﻿using K1QuickGen.Api.Interfaces;
+using K1QuickGen.Api.Models;
 using K1QuickGen.Api.Repositories;
 using K1QuickGen.Api.Services;
 using K1QuickGen.Contracts.Dtos;
@@ -15,13 +16,13 @@ namespace K1QuickGen.Api.Controllers
     [Route("api/[controller]")]
     public class Form1065Controller : ControllerBase
     {
-        private readonly Form1065Service _form1065Service;
+        private readonly IForm1065Service _form1065Service;
         private readonly Form1065Repository _form1065Repo;
         private readonly PartnerSubmissionRepository _partnerRepo;
         private readonly IForm1065PdfGenerator _pdfGenerator;
 
         public Form1065Controller(
-            Form1065Service form1065Service,
+            IForm1065Service form1065Service,
             Form1065Repository form1065Repo, 
             PartnerSubmissionRepository partnerRepo,
             IForm1065PdfGenerator pdfGenerator

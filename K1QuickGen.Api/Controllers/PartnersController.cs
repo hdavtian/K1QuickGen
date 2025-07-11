@@ -1,4 +1,5 @@
-﻿using K1QuickGen.Api.Models;
+﻿using K1QuickGen.Api.Interfaces;
+using K1QuickGen.Api.Models;
 using K1QuickGen.Api.Services;
 using K1QuickGen.Contracts.Dtos;
 using Microsoft.AspNetCore.Mvc;
@@ -12,9 +13,9 @@ namespace K1QuickGen.Api.Controllers
     [Route("api/[controller]")]
     public class PartnersController : ControllerBase
     {
-        private readonly PartnersSubmissionService _service;
+        private readonly IPartnersSubmissionService _service;
 
-        public PartnersController(PartnersSubmissionService service)
+        public PartnersController(IPartnersSubmissionService service)
         {
             _service = service;
         }
