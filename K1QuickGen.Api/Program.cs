@@ -75,6 +75,8 @@ namespace K1QuickGen.Api
                     app.UseSwaggerUI();
                 }
 
+                app.UseMiddleware<K1QuickGen.Api.Middleware.ErrorHandlingMiddleware>();
+
                 app.UseHttpsRedirection();
                 app.UseAuthorization();
                 app.MapControllers();
