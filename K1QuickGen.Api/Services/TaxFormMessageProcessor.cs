@@ -50,9 +50,7 @@ namespace K1QuickGen.Api.Services
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation("TaxForm Message Processor starting");
-
             _rabbitMqService.StartConsuming(ProcessMessage);
-
             return Task.CompletedTask;
         }
 
