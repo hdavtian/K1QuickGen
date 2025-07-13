@@ -9,6 +9,15 @@ using System.Text;
 
 namespace K1QuickGen.Api.Services
 {
+    /// <summary>
+    /// Service for managing RabbitMQ messaging infrastructure.
+    /// Handles connection setup, publishing messages to a queue, and consuming messages from a queue.
+    /// This service abstracts the low-level RabbitMQ client operations and provides a clean interface
+    /// for other services to send and receive messages asynchronously.
+    /// 
+    /// Typical usage includes publishing domain events or commands for background processing,
+    /// and consuming messages for event-driven workflows or integration with other systems.
+    /// </summary>
     public class RabbitMqService : IRabbitMqService, IDisposable
     {
         private readonly IConnection? _connection;
@@ -18,6 +27,12 @@ namespace K1QuickGen.Api.Services
         private readonly ILogger<RabbitMqService> _logger;
         private bool _disposed;
 
+        /// <summary>
+        /// Constructor. Initializes a new instance of the <see cref="RabbitMqService"/> class using Dependency Injection (DI).
+        /// Sets up the RabbitMQ connection and declares the target queue.
+        /// </summary>
+        /// <param name="options">The RabbitMQ settings injected via DI.</param>
+        /// <param name="logger">The logger instance for logging RabbitMQ events, injected via DI.</param>
         public RabbitMqService(IOptions<RabbitMqSettings> options, ILogger<RabbitMqService> logger)
         {
             _settings = options.Value;
@@ -51,6 +66,12 @@ namespace K1QuickGen.Api.Services
             }
         }
 
+        /// <summary>
+        /// Publishes a message to the configured RabbitMQ queue.
+        /// Serializes the message to JSON and marks it as persistent for reliability.
+        /// </summary>
+        /// <typeparam name="T">The type of the message to publish.</typeparam>
+        /// <param name="message">The message object to send.</param>
         public void Publish<T>(T message) where T : class
         {
             if (_channel == null || _connection == null || !_connection.IsOpen)
@@ -82,6 +103,10 @@ namespace K1QuickGen.Api.Services
             }
         }
 
+        /// <summary>
+        /// Starts consuming messages from the configured RabbitMQ queue.
+        /// Logs each received message and acknowledges processing.
+        /// </summary>
         public void StartConsuming()
         {
             if (_channel == null || _connection == null || !_connection.IsOpen)
@@ -131,7 +156,11 @@ namespace K1QuickGen.Api.Services
             }
         }
 
-        // Add this method to your existing RabbitMqService class
+        /// <summary>
+        /// Starts consuming messages from the configured RabbitMQ queue using a custom message processor.
+        /// The provided delegate is invoked for each received message.
+        /// </summary>
+        /// <param name="messageProcessor">A delegate to process each received message as a string.</param>
         public void StartConsuming(Action<string> messageProcessor)
         {
             if (_channel == null || _connection == null || !_connection.IsOpen)
@@ -181,12 +210,19 @@ namespace K1QuickGen.Api.Services
             }
         }
 
+        /// <summary>
+        /// Disposes the RabbitMQ connection and channel resources.
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// Protected dispose pattern implementation for releasing managed resources.
+        /// </summary>
+        /// <param name="disposing">Indicates whether managed resources should be disposed.</param>
         protected virtual void Dispose(bool disposing)
         {
             if (_disposed)
@@ -203,6 +239,11 @@ namespace K1QuickGen.Api.Services
 
             _disposed = true;
         }
+
+        /// <summary>
+        /// Checks if the RabbitMQ connection is currently open and available.
+        /// </summary>
+        /// <returns>True if the connection is open; otherwise, false.</returns>
         public bool IsConnected()
         {
             return _connection != null && _connection.IsOpen;

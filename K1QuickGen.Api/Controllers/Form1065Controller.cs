@@ -37,6 +37,13 @@ namespace K1QuickGen.Api.Controllers
             _pdfGenerator = pdfGenerator;
         }
 
+        /// <summary>
+        /// Retrieves a Form 1065 submission by its unique identifier.
+        /// </summary>
+        /// <param name="form1065Id">The unique identifier of the Form 1065.</param>
+        /// <returns>
+        /// Returns the Form1065OutputDto if found; otherwise, returns 404 Not Found.
+        /// </returns>
         [HttpGet("{form1065Id:guid}")]
         public async Task<ActionResult<Form1065OutputDto>> GetById(Guid form1065Id)
         {
@@ -46,6 +53,26 @@ namespace K1QuickGen.Api.Controllers
             return Ok(formDto);
         }
 
+        /// <summary>
+        /// Creates a new Form 1065 (U.S. Return of Partnership Income) submission.
+        /// This endpoint processes the complete form data, saves it to the database,
+        /// and publishes a notification event to the message broker for background processing.
+        /// </summary>
+        /// <param name="dto">The Form 1065 creation data containing all required partnership information</param>
+        /// <returns>
+        /// Returns a Form1065OutputDto containing the created form's details including the generated Form1065Id.
+        /// Returns BadRequest if required fields are missing or invalid.
+        /// </returns>
+        /// <remarks>
+        /// This method follows the Command-Query Responsibility Segregation (CQRS) pattern:
+        /// 1. Validates the incoming request data
+        /// 2. Delegates business logic to the Form1065Service
+        /// 3. The service handles database persistence and message publishing
+        /// 4. Returns the created form details for immediate client use
+        /// 
+        /// If AutoGenerateK1s is enabled in the request, a background PDF generation
+        /// command will be automatically triggered via the messaging system.
+        /// </remarks>
         [HttpPost]
         public async Task<IActionResult> SubmitForm([FromBody] Form1065CreateDto dto)
         {
@@ -56,6 +83,13 @@ namespace K1QuickGen.Api.Controllers
             return Ok(returnDto);
         }
 
+        /// <summary>
+        /// Retrieves all Form 1065 submissions for a specific company.
+        /// </summary>
+        /// <param name="companyId">The unique identifier of the company.</param>
+        /// <returns>
+        /// Returns a list of Form1065OutputDto objects for the specified company.
+        /// </returns>
         [HttpGet("{companyId}")]
         public async Task<ActionResult<List<Form1065OutputDto>>> GetByCompany(Guid companyId)
         {
@@ -63,6 +97,13 @@ namespace K1QuickGen.Api.Controllers
             return Ok(results);
         }
 
+        /// <summary>
+        /// Retrieves a Form 1065 submission along with its associated K-1 schedules.
+        /// </summary>
+        /// <param name="form1065Id">The unique identifier of the Form 1065.</param>
+        /// <returns>
+        /// Returns the Form1065OutputDto with K-1 schedules if found; otherwise, returns 404 Not Found.
+        /// </returns>
         [HttpGet("generate/{form1065Id}")]
         public async Task<IActionResult> GenerateFormAndK1s(Guid form1065Id)
         {
@@ -71,6 +112,13 @@ namespace K1QuickGen.Api.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Generates a PDF for a specific Form 1065 submission and returns it as a file download.
+        /// </summary>
+        /// <param name="form1065Id">The unique identifier of the Form 1065.</param>
+        /// <returns>
+        /// Returns a PDF file if the form is found; otherwise, returns 404 Not Found.
+        /// </returns>
         [HttpGet("generate-pdf/{form1065Id}")]
         public async Task<IActionResult> GeneratePdf(Guid form1065Id)
         {

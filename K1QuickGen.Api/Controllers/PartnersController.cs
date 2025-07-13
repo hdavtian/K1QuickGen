@@ -17,6 +17,11 @@ namespace K1QuickGen.Api.Controllers
         private readonly IPartnersSubmissionService _service;
         private readonly ILogger<PartnersController> _logger;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PartnersController"/> class.
+        /// </summary>
+        /// <param name="service">The service for partner submissions.</param>
+        /// <param name="logger">The logger instance for this controller.</param>
         public PartnersController(IPartnersSubmissionService service, ILogger<PartnersController> logger)
         {
             _service = service;
@@ -26,6 +31,10 @@ namespace K1QuickGen.Api.Controllers
         /// <summary>
         /// Submit a new partner entry to MongoDB.
         /// </summary>
+        /// <param name="dto">The partner submission data transfer object.</param>
+        /// <returns>
+        /// Returns the created partner submission output DTO if successful; otherwise, returns BadRequest for invalid input.
+        /// </returns>
         [HttpPost]
         public async Task<IActionResult> SubmitPartner([FromBody] PartnerSubmissionCreateDto dto)
         {
@@ -37,8 +46,11 @@ namespace K1QuickGen.Api.Controllers
         }
 
         /// <summary>
-        /// Get all partner submissions from MongoDB.
+        /// Retrieves all partner submissions from MongoDB.
         /// </summary>
+        /// <returns>
+        /// Returns a list of all partner submissions.
+        /// </returns>
         [HttpGet]
         public async Task<ActionResult<List<PartnerSubmission>>> GetAllPartners()
         {
@@ -47,8 +59,12 @@ namespace K1QuickGen.Api.Controllers
         }
 
         /// <summary>
-        /// Get partners by Form1065 ID (Guid).
+        /// Retrieves all partners associated with a specific Form1065 ID.
         /// </summary>
+        /// <param name="form1065Id">The unique identifier of the Form 1065.</param>
+        /// <returns>
+        /// Returns a list of partner submissions for the specified Form1065 ID.
+        /// </returns>
         [HttpGet("by-form/{form1065Id}")]
         public async Task<ActionResult<List<PartnerSubmission>>> GetByForm(Guid form1065Id)
         {

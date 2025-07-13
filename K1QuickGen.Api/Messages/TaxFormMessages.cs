@@ -17,11 +17,8 @@ namespace K1QuickGen.Api.Messages
     /// </summary>
     public class Form1065SubmittedMessage : MessageBase
     {
-        // Essential identifiers for lookups
         public Guid Form1065Id { get; set; }
         public Guid CompanyId { get; set; }
-
-        // Basic info useful for logging/tracking without DB lookups
         public string CompanyName { get; set; } = string.Empty;
         public int TaxYear { get; set; }
     }
@@ -31,12 +28,9 @@ namespace K1QuickGen.Api.Messages
     /// </summary>
     public class PartnerSubmittedMessage : MessageBase
     {
-        // Essential identifiers for lookups
         public Guid PartnerId { get; set; }
         public Guid Form1065Id { get; set; }
         public Guid CompanyId { get; set; }
-
-        // Basic info useful for logging/tracking without DB lookups
         public string PartnerName { get; set; } = string.Empty;
     }
 

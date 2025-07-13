@@ -8,11 +8,23 @@ using System.Threading.Tasks;
 
 namespace K1QuickGen.Api.Services
 {
+    /// <summary>
+    /// Service responsible for publishing tax form-related messages to RabbitMQ.
+    /// This service acts as an abstraction layer between business logic and the message broker,
+    /// providing methods to publish events and commands such as form submissions, partner submissions,
+    /// and PDF generation requests. It ensures that messaging concerns are separated from core business logic
+    /// and centralizes all message publishing for tax form workflows.
+    /// </summary>
     public class TaxFormMessagingService : ITaxFormMessagingService
     {
         private readonly IRabbitMqService _rabbitMqService;
         private readonly ILogger<TaxFormMessagingService> _logger;
 
+        /// <summary>
+        /// Constructor. Initializes a new instance of the <see cref="TaxFormMessagingService"/> class using Dependency Injection (DI).
+        /// </summary>
+        /// <param name="rabbitMqService">The RabbitMQ service for publishing messages, injected via DI.</param>
+        /// <param name="logger">The logger instance for logging messaging events, injected via DI.</param>
         public TaxFormMessagingService(
             IRabbitMqService rabbitMqService,
             ILogger<TaxFormMessagingService> logger)
@@ -21,6 +33,11 @@ namespace K1QuickGen.Api.Services
             _logger = logger;
         }
 
+        /// <summary>
+        /// Publishes a Form1065 submitted event to RabbitMQ.
+        /// </summary>
+        /// <param name="form">The output DTO containing details of the submitted Form 1065.</param>
+        /// <returns>A completed task when the event is published.</returns>
         public Task PublishForm1065SubmittedAsync(Form1065OutputDto form)
         {
             try
@@ -46,6 +63,11 @@ namespace K1QuickGen.Api.Services
             }
         }
 
+        /// <summary>
+        /// Publishes a partner submitted event to RabbitMQ.
+        /// </summary>
+        /// <param name="partner">The partner submission entity containing partner details.</param>
+        /// <returns>A completed task when the event is published.</returns>
         public Task PublishPartnerSubmittedAsync(PartnerSubmission partner)
         {
             try
@@ -70,6 +92,12 @@ namespace K1QuickGen.Api.Services
             }
         }
 
+        /// <summary>
+        /// Publishes a command to generate a PDF for a specific Form 1065 to RabbitMQ.
+        /// </summary>
+        /// <param name="form1065Id">The unique identifier of the Form 1065.</param>
+        /// <param name="includeK1s">Whether to include K-1 schedules in the PDF generation.</param>
+        /// <returns>A completed task when the command is published.</returns>
         public Task PublishGeneratePdfCommandAsync(Guid form1065Id, bool includeK1s = true)
         {
             try
