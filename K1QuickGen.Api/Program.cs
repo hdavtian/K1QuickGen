@@ -1,5 +1,6 @@
 ﻿using K1QuickGen.Api.Config;
 using K1QuickGen.Api.Interfaces;
+using K1QuickGen.Api.Models;
 using K1QuickGen.Api.Repositories;
 using K1QuickGen.Api.Services;
 using K1QuickGen.PdfGeneration;
@@ -64,6 +65,12 @@ namespace K1QuickGen.Api
                 builder.Services.AddScoped<IForm1065Service, Form1065Service>();
                 builder.Services.AddScoped<PartnersSubmissionService>();
                 builder.Services.AddScoped<IPartnersSubmissionService, PartnersSubmissionService>();
+                builder.Services.AddScoped<ITaxFormMessagingService, TaxFormMessagingService>();
+                builder.Services.AddHostedService<TaxFormMessageProcessor>();
+
+                builder.Services.Configure<RabbitMqSettings>(
+                    builder.Configuration.GetSection("RabbitMqSettings"));
+                builder.Services.AddSingleton<IRabbitMqService, RabbitMqService>();
 
                 QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 

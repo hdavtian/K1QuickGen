@@ -8,7 +8,7 @@ namespace K1QuickGen.DataSeeder
     {
         public static async Task Main(string[] args)
         {
-            await SeedMongo();
+            //await SeedMongo();
         }
 
         static async Task SeedMongo() {

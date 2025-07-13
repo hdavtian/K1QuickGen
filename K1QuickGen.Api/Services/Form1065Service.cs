@@ -13,11 +13,16 @@ namespace K1QuickGen.Api.Services
     {
         private readonly Form1065Repository _form1065Repo;
         private readonly PartnerSubmissionRepository _partnerRepo;
+        private readonly ITaxFormMessagingService _messagingService;
 
-        public Form1065Service(Form1065Repository form1065Repo, PartnerSubmissionRepository partnerRepo)
+        public Form1065Service(
+            Form1065Repository form1065Repo, 
+            PartnerSubmissionRepository partnerRepo,
+            ITaxFormMessagingService messagingService)
         {
             _form1065Repo = form1065Repo;
             _partnerRepo = partnerRepo;
+            _messagingService = messagingService;
         }
 
         public async Task<Form1065OutputDto> GetForm1065DtoByIdAsync(Guid form1065Id)
@@ -81,7 +86,7 @@ namespace K1QuickGen.Api.Services
 
             await _form1065Repo.InsertAsync(form);
 
-            return new Form1065OutputDto
+            var outputDto = new Form1065OutputDto
             {
                 Form1065Id = form.Id,
                 CompanyName = form.CompanyName,
@@ -102,6 +107,17 @@ namespace K1QuickGen.Api.Services
                 IsAmendedReturn = form.IsAmendedReturn,
                 PartnerK1s = new List<K1ScheduleDto>()
             };
+
+            // Publish the form submission event
+            await _messagingService.PublishForm1065SubmittedAsync(outputDto);
+
+            // If auto-generate is enabled, also publish a PDF generation command
+            if (dto.AutoGenerateK1s)
+            {
+                await _messagingService.PublishGeneratePdfCommandAsync(form.Id);
+            }
+
+            return outputDto;
         }
 
         public async Task<List<Form1065OutputDto>> GetFormsByCompanyIdAsync(Guid companyId)

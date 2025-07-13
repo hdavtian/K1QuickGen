@@ -3,6 +3,7 @@ using K1QuickGen.Api.Models;
 using K1QuickGen.Api.Services;
 using K1QuickGen.Contracts.Dtos;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -14,10 +15,12 @@ namespace K1QuickGen.Api.Controllers
     public class PartnersController : ControllerBase
     {
         private readonly IPartnersSubmissionService _service;
+        private readonly ILogger<PartnersController> _logger;
 
-        public PartnersController(IPartnersSubmissionService service)
+        public PartnersController(IPartnersSubmissionService service, ILogger<PartnersController> logger)
         {
             _service = service;
+            _logger = logger;
         }
 
         /// <summary>

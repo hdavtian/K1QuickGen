@@ -11,10 +11,12 @@ namespace K1QuickGen.Api.Services
     public class PartnersSubmissionService : IPartnersSubmissionService
     {
         private readonly PartnerSubmissionRepository _repository;
+        private readonly ITaxFormMessagingService _messagingService;
 
-        public PartnersSubmissionService(PartnerSubmissionRepository repository)
+        public PartnersSubmissionService(PartnerSubmissionRepository repository, ITaxFormMessagingService messagingService)
         {
             _repository = repository;
+            _messagingService = messagingService;
         }
 
         public async Task<PartnerSubmissionOutputDto> CreateAsync(PartnerSubmissionCreateDto dto)
@@ -45,7 +47,7 @@ namespace K1QuickGen.Api.Services
 
             await _repository.InsertAsync(submission);
 
-            return new PartnerSubmissionOutputDto
+            var outputDto = new PartnerSubmissionOutputDto
             {
                 Id = submission.Id,
                 Form1065Id = submission.Form1065Id,
@@ -57,6 +59,11 @@ namespace K1QuickGen.Api.Services
                 Email = submission.Email,
                 // Add other fields as needed
             };
+
+            // Publish the partner submission event
+            await _messagingService.PublishPartnerSubmittedAsync(submission);
+
+            return outputDto;
         }
 
         public async Task<List<PartnerSubmission>> GetAllAsync()

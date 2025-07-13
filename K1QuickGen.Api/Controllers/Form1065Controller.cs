@@ -5,6 +5,7 @@ using K1QuickGen.Api.Services;
 using K1QuickGen.Contracts.Dtos;
 using K1QuickGen.PdfGeneration.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,12 +21,14 @@ namespace K1QuickGen.Api.Controllers
         private readonly Form1065Repository _form1065Repo;
         private readonly PartnerSubmissionRepository _partnerRepo;
         private readonly IForm1065PdfGenerator _pdfGenerator;
+        private readonly ILogger<Form1065Controller> _logger;
 
         public Form1065Controller(
             IForm1065Service form1065Service,
             Form1065Repository form1065Repo, 
             PartnerSubmissionRepository partnerRepo,
-            IForm1065PdfGenerator pdfGenerator
+            IForm1065PdfGenerator pdfGenerator,
+            ILogger<Form1065Controller> logger
             )
         {
             _form1065Service = form1065Service;
