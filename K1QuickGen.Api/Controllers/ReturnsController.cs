@@ -8,6 +8,22 @@ using System.Threading.Tasks;
 
 namespace K1QuickGen.Api.Controllers
 {
+    /// <summary>
+    /// API Controller for managing partnership tax returns (Form 1065).
+    /// 
+    /// Responsibilities:
+    /// - Handles creation and retrieval of partnership return records for companies.
+    /// - Validates and processes incoming data for new returns, including company, partnership name, EIN, and tax year.
+    /// - Integrates with the repository layer for MongoDB persistence.
+    /// - Provides endpoints for creating new returns, retrieving by return ID, and listing all returns for a company.
+    /// 
+    /// Endpoints:
+    /// - Create a new partnership return (POST)
+    /// - Retrieve a partnership return by ID (GET)
+    /// - Retrieve all returns for a company (GET)
+    /// 
+    /// This controller supports the workflow for capturing and managing partnership tax return data required for compliance and reporting.
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class ReturnsController : ControllerBase

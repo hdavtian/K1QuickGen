@@ -5,6 +5,19 @@ using System;
 
 namespace K1QuickGen.Api.Controllers
 {
+    /// <summary>
+    /// API Controller for system health monitoring.
+    /// 
+    /// Responsibilities:
+    /// - Provides endpoints to check the health and connectivity of system components, specifically the RabbitMQ message broker.
+    /// - Publishes test messages to RabbitMQ to verify messaging infrastructure is operational.
+    /// - Logs health check events and errors for diagnostics.
+    /// 
+    /// Endpoints:
+    /// - Check RabbitMQ connectivity (GET /api/healthcheck/rabbitmq)
+    /// 
+    /// This controller helps ensure reliable background processing and messaging by validating the status of RabbitMQ.
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class HealthCheckController : ControllerBase

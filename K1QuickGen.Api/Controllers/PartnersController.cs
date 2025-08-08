@@ -10,6 +10,22 @@ using System.Threading.Tasks;
 
 namespace K1QuickGen.Api.Controllers
 {
+    /// <summary>
+    /// API Controller for managing partner submissions related to IRS Form 1065.
+    /// 
+    /// Responsibilities:
+    /// - Handles creation and retrieval of partner records associated with partnership tax filings.
+    /// - Validates and processes partner data, including ownership, capital contributions, and tax attributes.
+    /// - Integrates with the partner submission service for business logic and MongoDB for data persistence.
+    /// - Provides endpoints for submitting new partners, listing all partners, and filtering by Form 1065 ID.
+    /// 
+    /// Endpoints:
+    /// - Submit a new partner (POST)
+    /// - Retrieve all partner submissions (GET)
+    /// - Retrieve partners by Form 1065 ID (GET)
+    /// 
+    /// This controller supports the workflow for capturing and managing partner details required for K-1 schedules and partnership tax compliance.
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class PartnersController : ControllerBase

@@ -38,7 +38,22 @@ namespace K1QuickGen.Api.Controllers
         }
 
         /// <summary>
-        /// Retrieves a Form 1065 submission by its unique identifier.
+        /// API Controller for managing IRS Form 1065 submissions and related operations.
+        /// 
+        /// Responsibilities:
+        /// - Handles creation, retrieval, and listing of Form 1065 records for partnerships.
+        /// - Supports generating and downloading Form 1065 PDFs, including associated K-1 schedules.
+        /// - Integrates with services and repositories for business logic, data persistence, and PDF generation.
+        /// - Validates incoming data and provides structured responses for client applications.
+        /// 
+        /// Endpoints:
+        /// - Submit a new Form 1065 (POST)
+        /// - Retrieve a Form 1065 by ID (GET)
+        /// - List all Form 1065 submissions for a company (GET)
+        /// - Retrieve a Form 1065 with K-1 schedules (GET)
+        /// - Generate and download a Form 1065 PDF (GET)
+        /// 
+        /// This controller is central to the workflow for partnership tax form automation and document generation.
         /// </summary>
         /// <param name="form1065Id">The unique identifier of the Form 1065.</param>
         /// <returns>

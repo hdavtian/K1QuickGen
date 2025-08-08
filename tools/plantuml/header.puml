@@ -1,0 +1,6 @@
+' ===== Custom PlantUML Skin Settings =====
+skinparam wrapWidth 60
+skinparam maxMessageSize 60
+skinparam wrapMessageWidth 60
+skinparam classAttributeFontSize 10
+skinparam classOperationFontSize 10
